@@ -1,0 +1,11 @@
+# Archivos de Oracle y copias: nunca al repositorio (pesan GB)
+*.dbf
+*.ctl
+*.bkp
+*.arc
+*.log
+rman_backup/
+oradata/
+# Temporales de Word y del sistema
+~$*
+.DS_Store
