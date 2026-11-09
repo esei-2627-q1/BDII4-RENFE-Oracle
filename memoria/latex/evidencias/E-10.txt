@@ -1,0 +1,16 @@
+NAME   DESCRIPTION            PID SPID
+ARC0   Archival Process 0      73 190
+ARC1   Archival Process 1      74 192
+ARC2   Archival Process 2      75 194
+ARC3   Archival Process 3      76 196
+CKPT   checkpoint              21 98
+DBW0   db writer process 0     19 92
+LGWR   Redo etc.               20 94
+
+FILE_TYPE        PERCENT_SPACE_USED PERCENT_SPACE_RECLAIMABLE NUMBER_OF_FILES
+ARCHIVED LOG                   7.28                         6              17
+BACKUP PIECE                    .88                       .44               2
+(resto de tipos a 0)
+
+NAME                      SPACE_LIMIT SPACE_USED SPACE_RECLAIMABLE NUMBER_OF_FILES
+/opt/oracle/oradata/FRA    4294967296  350265856         276412416              19

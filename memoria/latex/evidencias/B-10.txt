@@ -1,0 +1,10 @@
+TABLA                 FILAS
+---------------- ----------
+PASAJERO                  0
+BILLETE                   0
+VIAJE                     0
+BILLETE_CLASICO           0
+BILLETE_ESPECIAL          0
+RECLAMACION               0
+
+6 rows selected.

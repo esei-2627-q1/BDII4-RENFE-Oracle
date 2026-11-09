@@ -1,0 +1,8 @@
+TABLESPACE_NAME       BYTES  MAX_BYTES
+---------------- ---------- ----------
+ALUMNO_DATA               0         -1
+TS_RENFE_DATOS     35061760  536870912
+TS_RENFE_HIST       9109504  134217728
+TS_RENFE_INDICES   26804224  536870912
+
+4 rows selected.

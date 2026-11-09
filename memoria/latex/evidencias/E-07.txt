@@ -1,0 +1,48 @@
+SQL> ALTER SYSTEM SET log_archive_dest_1 = 'LOCATION=USE_DB_RECOVERY_FILE_DEST' SCOPE=BOTH;
+
+System altered.
+
+SQL> SHUTDOWN IMMEDIATE
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> STARTUP MOUNT
+ORACLE instance started.
+
+Total System Global Area 1603392928 bytes
+Fixed Size            5027232 bytes
+Variable Size          603979776 bytes
+Database Buffers      989855744 bytes
+Redo Buffers            4530176 bytes
+Database mounted.
+SQL> ALTER DATABASE ARCHIVELOG;
+
+Database altered.
+
+SQL> ALTER DATABASE OPEN;
+
+Database altered.
+
+SQL> SELECT name, open_mode, log_mode FROM v$database;
+
+NAME      OPEN_MODE           LOG_MODE
+--------- -------------------- ------------
+FREE      READ WRITE           ARCHIVELOG
+
+SQL> SELECT name, open_mode FROM v$pdbs;
+
+NAME
+--------------------------------------------------------------------------------
+OPEN_MODE
+----------
+PDB$SEED
+READ ONLY
+
+FREEPDB1
+READ WRITE
+
+BDII
+READ WRITE
+
+
+SQL>

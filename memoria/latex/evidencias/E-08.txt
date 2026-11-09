@@ -1,0 +1,25 @@
+RMAN> BACKUP DATABASE FORMAT '/opt/oracle/oradata/rman/db_%U.bkp';
+[...]
+piece handle=/opt/oracle/oradata/rman/db_01hr7cc1_1_1_1.bkp tag=TAG20261101T212209 comment=NONE
+piece handle=/opt/oracle/oradata/rman/db_02kr7cc4_2_1_1.bkp tag=TAG20261101T212209 comment=NONE
+piece handle=/opt/oracle/oradata/rman/db_03lr7cc5_3_1_1.bkp tag=TAG20261101T212209 comment=NONE
+piece handle=/opt/oracle/oradata/rman/db_04nr7cc7_4_1_1.bkp tag=TAG20261101T212209 comment=NONE
+Finished backup at 01-NOV-26
+Starting Control File and SPFILE Autobackup at 01-NOV-26
+piece handle=/opt/oracle/oradata/FRA/FREE/autobackup/2026_11_01/o1_mf_s_1248211336_ogh7vr8h_.bkp comment=NONE
+Finished Control File and SPFILE Autobackup at 01-NOV-26
+
+RMAN> BACKUP CURRENT CONTROLFILE FORMAT '/opt/oracle/oradata/rman/cf_%U.bkp';
+[...]
+piece handle=/opt/oracle/oradata/rman/cf_06ur7ccd_6_1_1.bkp tag=TAG20261101T212221 comment=NONE
+Finished backup at 01-NOV-26
+
+RMAN> RESTORE DATABASE VALIDATE;
+[...]
+channel ORA_DISK_1: validation complete, elapsed time: 00:00:02   (y otros 3 conjuntos validados)
+Finished restore at 01-NOV-26
+
+SQL> SELECT ROUND(SUM(bytes)/1048576,2) AS mib FROM v$backup_piece WHERE handle LIKE '/opt/oracle/oradata/rman/db_%';
+       MIB
+----------
+   2982.93

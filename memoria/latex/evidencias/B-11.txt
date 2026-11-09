@@ -1,0 +1,55 @@
+SEGMENT_NAME         SEGMENT_TYPE           EXT    FILE_ID   BLOCK_ID     BLOCKS      BYTES
+-------------------- --------------- ---------- ---------- ---------- ---------- ----------
+ALMACEN              TABLE                    0         39        208          8      65536
+ANDEN                TABLE                    0         39        192          8      65536
+EMPLEADO             TABLE                    0         39        128          8      65536
+EMPLEADO_TELEFONO    TABLE                    0         39        136          8      65536
+ESTACION             TABLE                    0         39        144          8      65536
+MAQUINISTA           TABLE                    0         39        152          8      65536
+PIEZA                TABLE                    0         39        232          8      65536
+PROVEEDOR            TABLE                    0         39        224          8      65536
+REVISOR              TABLE                    0         39        160          8      65536
+REVISOR_IDIOMA       TABLE                    0         39        168          8      65536
+RUTA                 TABLE                    0         39        216          8      65536
+SEGURIDAD            TABLE                    0         39        184          8      65536
+TAQUILLA             TABLE                    0         39        200          8      65536
+TECNICO              TABLE                    0         39        176          8      65536
+TREN                 TABLE                    0         39        240          8      65536
+TREN_MERCANCIA       TABLE                    0         39        256          8      65536
+TREN_MIXTO           TABLE                    0         39        264          8      65536
+TREN_PASAJEROS       TABLE                    0         39        248          8      65536
+VAGON                TABLE                    0         39        272          8      65536
+PK_ALMACEN           INDEX                    0         40        240          8      65536
+PK_ANDEN             INDEX                    0         40        224          8      65536
+PK_EMPLEADO          INDEX                    0         40        144          8      65536
+PK_EMPLEADO_TELEFONO INDEX                    0         40        160          8      65536
+PK_ESTACION          INDEX                    0         40        176          8      65536
+PK_MAQUINISTA        INDEX                    0         40        184          8      65536
+PK_PIEZA             INDEX                    0         40        272          8      65536
+PK_PROVEEDOR         INDEX                    0         40        264          8      65536
+PK_REVISOR           INDEX                    0         40        192          8      65536
+PK_REVISOR_IDIOMA    INDEX                    0         40        200          8      65536
+PK_RUTA              INDEX                    0         40        256          8      65536
+PK_SEGURIDAD         INDEX                    0         40        216          8      65536
+PK_TAQUILLA          INDEX                    0         40        232          8      65536
+PK_TECNICO           INDEX                    0         40        208          8      65536
+PK_TREN              INDEX                    0         40        280          8      65536
+PK_TREN_MERCANCIA    INDEX                    0         40        296          8      65536
+PK_TREN_MIXTO        INDEX                    0         40        304          8      65536
+PK_TREN_PASAJEROS    INDEX                    0         40        288          8      65536
+PK_VAGON             INDEX                    0         40        320          8      65536
+UQ_EMPLEADO_DNI_TIPO INDEX                    0         40        128          8      65536
+UQ_EMPLEADO_NSS      INDEX                    0         40        136          8      65536
+UQ_EMPTEL_TELEFONO   INDEX                    0         40        152          8      65536
+UQ_ESTACION_JEFE     INDEX                    0         40        168          8      65536
+UQ_RUTA_DESTINO      INDEX                    0         40        248          8      65536
+UQ_VAGON_SIGUIENTE   INDEX                    0         40        312          8      65536
+
+44 rows selected.
+
+TABLESPACE_NAME  EXTENSIONES    BLOQUES        MIB
+---------------- ----------- ---------- ----------
+TS_RENFE_DATOS            19        152       1.19
+TS_RENFE_INDICES          25        200       1.56
+
+2 rows selected.

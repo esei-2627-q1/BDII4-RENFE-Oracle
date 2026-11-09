@@ -1,0 +1,6 @@
+LECTURA                  HORA     REDO_BYTES
+------------------------ -------- ----------
+L1 antes sin indices     22:09:42  375737940
+L2 despues sin indices   22:09:44  380760632
+L3 antes con indices     22:09:46  380884000
+L4 despues con indices   22:09:52  430720928

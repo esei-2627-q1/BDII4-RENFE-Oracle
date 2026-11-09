@@ -1,0 +1,15 @@
+TABLESPACE_NAME  EXTENSIONES    BLOQUES        MIB
+---------------- ----------- ---------- ----------
+TS_RENFE_DATOS            76       1208       9.44
+TS_RENFE_INDICES         168       2304         18
+
+2 rows selected.
+
+TABLESPACE_NAME      BLOCKS EXTENSIONES
+---------------- ---------- -----------
+TS_RENFE_DATOS            8          71
+TS_RENFE_DATOS          128           5
+TS_RENFE_INDICES          8         160
+TS_RENFE_INDICES        128           8
+
+4 rows selected.

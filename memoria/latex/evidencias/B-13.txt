@@ -1,0 +1,10 @@
+TABLA                 FILAS
+---------------- ----------
+PASAJERO               5000
+BILLETE               50000
+VIAJE                  2500
+BILLETE_CLASICO       40000
+BILLETE_ESPECIAL      10000
+RECLAMACION             500
+
+6 rows selected.

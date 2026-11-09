@@ -1,0 +1,15 @@
+FILAS_BILLETE_PART
+------------------
+             50000
+
+1 row selected.
+
+PARTICION      FILAS
+--------- ----------
+P_2026_11      14400
+P_2026_12      14880
+P_2027_01      14880
+P_2027_02       5840
+P_FUTURO           0
+
+5 rows selected.

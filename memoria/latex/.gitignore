@@ -1,0 +1,9 @@
+# Auxiliares de pdfLaTeX (el PDF de entrega va en ../Memoria_RENFE_Oracle_BDII_4.pdf)
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+main.pdf

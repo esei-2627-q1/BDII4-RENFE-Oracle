@@ -1,0 +1,17 @@
+-- Antes
+    GROUP#    THREAD#  SEQUENCE#        MIB    MEMBERS STATUS           ARC
+         1          1         29         20          1 CURRENT          NO
+         2          1         28         20          1 INACTIVE         YES
+     RECID    THREAD#  SEQUENCE#    DEST_ID NAME
+        16          1         28          1 /opt/oracle/oradata/FRA/FREE/archivelog/2026_11_01/o1_mf_1_28_oghb3rds_.arc
+
+SQL> ALTER SYSTEM ARCHIVE LOG CURRENT;
+System altered.
+
+-- Después
+    GROUP#    THREAD#  SEQUENCE# STATUS           ARC
+         1          1         29 ACTIVE           YES
+         2          1         30 CURRENT          NO
+     RECID  SEQUENCE#    DEST_ID NAME                                                          HORA                 S DEL
+        16         28          1 /opt/oracle/oradata/FRA/FREE/archivelog/2026_11_01/o1_mf_1_28_oghb3rds_.arc  01-NOV-2026 22:00:40  A NO
+        17         29          1 /opt/oracle/oradata/FRA/FREE/archivelog/2026_11_01/o1_mf_1_29_oghc1nyl_.arc  01-NOV-2026 22:16:37  A NO

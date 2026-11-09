@@ -1,0 +1,454 @@
+% =============================================================================
+%  Memoria de la práctica de administración de Oracle 26ai · BDII4 :: RENFE
+%  Sigue la plantilla de entrega de la práctica (Moovi): apartados A-F, mismas
+%  tablas y mismos campos. Compilar con pdfLaTeX (Overleaf: Menu > Compiler).
+%  figuras/     capturas de SQL Developer y escudo de la UVigo
+%  evidencias/  salidas de SQL*Plus incluidas tal cual (\lstinputlisting)
+% =============================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---------- idioma y tipografía ----------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-noshorthands]{babel}
+\IfFileExists{XCharter.sty}{\usepackage{XCharter}}{\usepackage{charter}}
+\IfFileExists{beramono.sty}{\usepackage[scaled=0.85]{beramono}}{\usepackage{courier}}
+\usepackage{microtype}
+\usepackage{newunicodechar}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{−}{\ensuremath{-}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+
+% ---------- página ----------
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.3cm,right=2.3cm,headheight=14pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\definecolor{azuluvigo}{RGB}{0,51,102}
+\definecolor{grisclaro}{RGB}{242,242,242}
+\definecolor{cabecera}{RGB}{220,230,242}
+
+% ---------- tablas, figuras y código ----------
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{array,tabularx,longtable,booktabs}
+\usepackage[table]{colortbl}
+\usepackage{caption}
+\captionsetup{font=small,labelfont={bf,color=azuluvigo},justification=raggedright,singlelinecheck=false}
+\captionsetup[table]{name=Tabla,position=top}
+\usepackage[section]{placeins}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=4pt}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,
+        backgroundcolor=\color{grisclaro},rulecolor=\color{gray!50},
+        columns=fullflexible,keepspaces=true,xleftmargin=2pt,xrightmargin=2pt,
+        literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1
+                 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1
+                 {→}{{$\rightarrow$}}1 {−}{{-}}1 {·}{{$\cdot$}}1}
+% salidas de SQL*Plus: monoespaciado fijo para que las columnas queden alineadas
+\lstdefinestyle{salida}{basicstyle=\ttfamily\fontsize{6.5pt}{7.6pt}\selectfont,columns=fixed,breaklines=true,
+        backgroundcolor=\color{white},frame=single}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={BDII4 RENFE - Administracion logica y fisica con Oracle 26ai},pdfauthor={Grupo BDII4}}
+
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{4pt}
+\DeclareRobustCommand{\_}{\textunderscore\allowbreak}
+\pdfstringdefDisableCommands{\def\_{\textunderscore}}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+
+% apartados con letra (A-F), como en la plantilla
+\renewcommand{\thesection}{\Alph{section}}
+\setcounter{secnumdepth}{1}
+\titleformat{\section}{\Large\bfseries\color{azuluvigo}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\large\bfseries\color{azuluvigo}}{}{0em}{}
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gray}BDII4 :: RENFE}
+\fancyhead[R]{\small\color{gray}Administración lógica y física con Oracle 26ai}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---------- utilidades ----------
+\newcommand{\tb}[1]{\texttt{#1}}
+\newcommand{\campo}[1]{\textbf{#1:}~}                 % campos de la plantilla
+\newcommand{\cab}[1]{\textbf{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\filacab}{\rowcolor{cabecera}}
+% evidencia en texto (salida de SQL*Plus)
+\newcommand{\evtexto}[3]{%
+  \par\needspace{6\baselineskip}\textbf{#1 · #2}\par\nopagebreak
+  {\small\itshape #3}\par\nopagebreak
+  \lstinputlisting[style=salida]{evidencias/#1.txt}}
+% evidencia en imagen (captura de SQL Developer)
+\newcommand{\evimagen}[4][0.9\linewidth]{%
+  \par\noindent\begin{minipage}{\linewidth}% bloque indivisible: título, pie e imagen juntos
+  \textbf{#2 · #3}\par
+  {\small\itshape #4}\par\smallskip
+  \centering\includegraphics[width=#1,height=0.42\textheight,keepaspectratio]{figuras/#2.png}
+  \end{minipage}\par\bigskip}
+\usepackage{needspace}
+
+% =============================================================================
+\begin{document}
+
+% ------------------------------ PORTADA --------------------------------------
+\begin{titlepage}
+\centering
+\IfFileExists{figuras/logo_uvigo.png}{\includegraphics[height=4cm]{figuras/logo_uvigo.png}}{}\par
+\vspace{0.5cm}
+{\Large\scshape Universidade de Vigo}\par
+\vspace{0.15cm}
+{\large\scshape Escola Superior de Enxeñaría Informática}\par
+\vspace{0.15cm}
+{\normalsize Bases de Datos II · Curso 2026/2027}\par
+\vspace{2cm}
+{\color{azuluvigo}\rule{\linewidth}{1.2pt}}\par
+\vspace{0.4cm}
+{\Huge\bfseries Administración lógica y física\\[4pt] con Oracle 26ai\par}
+\vspace{0.3cm}
+{\Large Memoria de la práctica · Equipo BDII\_4 (RENFE)\par}
+\vspace{0.4cm}
+{\color{azuluvigo}\rule{\linewidth}{1.2pt}}\par
+\vfill
+{\large
+Alejandro Francisco Pérez Rodríguez\\[3pt]
+Mario Pérez González\\[3pt]
+Jacobo Montero Naranjo\\[3pt]
+Pablo Regueira Castaño\par}
+\vspace{1cm}
+{\large \today\par}
+\end{titlepage}
+
+% ------------------------- FICHA DE LA PLANTILLA ------------------------------
+\campo{Proyecto y temática} RENFE (código BDII\_4::RENFE): gestión ferroviaria con trenes y vagones, estaciones, personal, billetes y pasajeros, y mantenimiento con proveedores. El esquema es el de la repesca del Entregable 1 (28 tablas; ya no existe \tb{Pasajero\_Viaje}).
+
+\campo{Equipo e integrantes} BDII\_4: Alejandro Francisco Pérez Rodríguez, Mario Pérez González, Jacobo Montero Naranjo y Pablo Regueira Castaño.
+
+\campo{Entorno de trabajo} Oracle AI Database 26ai Free, Release 23.26.2.0.0, en Docker (\tb{gvenzl/oracle-free:23.26.2}). CDB FREE de instancia única y PDB BDII. Cuentas: ALUMNO en el servicio \tb{bdii} y SYSTEM en el servicio \tb{free} (CDB\$ROOT). Clientes: SQL Developer para VS Code y, dentro del contenedor, SQL*Plus y RMAN como SYSDBA. Scripts: carpeta \tb{scripts/} del repositorio, numerados en el orden de ejecución.
+
+\tableofcontents
+
+% =============================================================================
+\section{Sistemas y necesidades de uso}
+% =============================================================================
+Sistemas y operaciones que representan el uso previsto de la base de datos.
+
+{\small
+\begin{longtable}{L{4.1cm} L{5.6cm} L{5.6cm}}
+\toprule\filacab
+\cab{Sistema y propósito} & \cab{Operaciones y horario} & \cab{Conexiones y crecimiento} \\
+\midrule\endhead
+Venta de billetes (taquillas y web): alta y consulta de billetes, con su subtipo clásico o especial. & Altas en Billete, Billete\_Clasico y Billete\_Especial; consultas de Viaje, Taquilla y Pasajero. Todos los días, 08:00-20:00. & API con 2 réplicas y pool máximo de 4 conexiones: 8 sesiones en punta. Hipótesis: 2.000 billetes/día (≈ 730.000 en 12 meses). \\
+Operación ferroviaria: programación de viajes y asignación de personal. & Altas y consultas en Viaje y Revisor\_Viaje; consulta de Billete. Programación diaria y carga masiva nocturna (≈ 100.000 filas). & 1 tarea programada nocturna. Hipótesis: ≈ 100 viajes/día. \\
+Mantenimiento: instalación de piezas en trenes por los técnicos. & Altas en Instalacion; consultas de Pieza, Proveedor y Tecnico. Horario laboral, uso esporádico. & Sesiones puntuales, dentro del margen de planificación. Crecimiento bajo. \\
+Atención al cliente: reclamaciones y equipaje. & Altas en Reclamacion y Bulto; consulta de Pasajero. 08:00-20:00. & Comparte las sesiones del pool de la API. Hipótesis: ≈ 20 reclamaciones/día. \\
+Administración e informes: datos maestros y consultas. & Lecturas sobre todas las tablas y altas en Estacion, Almacen, Ruta y Empleado. Informe diario. & 2 sesiones de administración y 1 tarea de informes. Crecimiento despreciable. \\
+\bottomrule
+\end{longtable}}
+
+\campo{Carga conjunta} Coinciden en el horario comercial (08:00-20:00) la venta de billetes y la atención al cliente; la carga masiva y los informes se ejecutan por la noche, aunque se cuentan en la punta por prudencia. Punta: 8 sesiones de la API (2 réplicas × pool de 4) + 2 tareas programadas (carga nocturna e informes) + 2 sesiones de administración = 12 sesiones; con un margen del 25\,\% se planifican 15. Los usuarios de la aplicación (pasajeros, taquilleros, personal) no abren sesiones Oracle propias: se identifican en la aplicación y comparten las sesiones del pool.
+
+\campo{Estimación de crecimiento} Hipótesis a 12 meses: 2.000 billetes/día (≈ 730.000), 100 viajes/día y 20 reclamaciones/día. La carga del apartado B (50.000 billetes, unos 25 días) ocupó 8,25 MiB de datos y 16,44 MiB de índices; los índices pesan el doble porque Billete tiene 6 (3 de restricciones y 3 secundarios). Extrapolado de forma lineal (× 14,6): ≈ 120 MiB de datos y ≈ 240 MiB de índices, ≈ 360 MiB en total y ≈ 450 MiB con un margen del 25\,\%. Espacio asignado por fila: Billete ≈ 105 B (guarda además su viaje), Billete\_Clasico ≈ 52 B, Billete\_Especial ≈ 59 B, Viaje ≈ 105 B y Pasajero ≈ 79 B. Es la extrapolación de una sola carga y se revisará con \tb{USER\_SEGMENTS} (MiB = 1.048.576 bytes).
+
+\campo{Necesidades de recuperación} RPO de 15 minutos de pérdida máxima de datos y RTO de 60 minutos de tiempo sin servicio. Se apoyan en ARCHIVELOG, copias RMAN y un archivado forzado como mucho cada 15 minutos (apartado E).
+
+% =============================================================================
+\section{Organización en tablespaces}
+% =============================================================================
+\subsection{Características de los tablespaces y archivos}
+
+{\small
+\begin{longtable}{L{5.6cm} L{2.6cm} L{7.1cm}}
+\toprule\filacab
+\cab{Objetos o segmentos} & \cab{Tablespace} & \cab{Motivo de la ubicación} \\
+\midrule\endhead
+Las 28 tablas de la aplicación RENFE (esquema de la repesca): Billete, Billete\_Clasico, Billete\_Especial, Pasajero, Viaje, Revisor\_Viaje, Reclamacion, Estacion, Almacen, Anden, Taquilla, Tren, Empleado y el resto & \tb{ts\_renfe\_datos} & Datos en un archivo propio, separado de los índices y del tablespace anterior de ALUMNO. Gestión local de extensiones y ASSM. Billete es la que más crece. \\
+Los 41 índices: 37 de claves PRIMARY KEY y UNIQUE (\tb{USING INDEX TABLESPACE}) y 4 secundarios (\tb{ix\_billete\_fcompra}, \tb{ix\_billete\_pasajero}, \tb{ix\_billete\_taquilla}, \tb{ix\_viaje\_fecha}) & \tb{ts\_renfe\_indices} & Los índices ocupan el doble que los datos (18 frente a 9,44 MiB) y crecen a otro ritmo; separarlos permite límites y vigilancia distintos. Ambos archivos están en el mismo volumen, así que la separación no mejora la E/S física. \\
+Ningún objeto de RENFE & \tb{ALUMNO\_DATA} & Tablespace anterior de ALUMNO (200 MiB, máximo 2.048 MiB); se deja sin objetos de RENFE. \\
+Partición histórica P\_2026\_11 de Billete\_Part y su partición del índice local \tb{uq\_billetep\_asiento} (ip\_2026\_11) & \tb{ts\_renfe\_hist} & Datos de meses cerrados, trasladados con MOVE PARTITION; permite separar el histórico (más espacio, copias menos frecuentes) del que se escribe a diario. \\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}{L{5.3cm} L{3.9cm} L{6.1cm}}
+\toprule\filacab
+\cab{Tablespace y archivo} & \cab{Tamaño y crecimiento} & \cab{Límite y previsión de uso} \\
+\midrule\endhead
+\tb{ts\_renfe\_datos}\newline\tb{/opt/oracle/oradata/FREE/BDII/} \tb{ts\_renfe\_datos01.dbf} & 64 MiB iniciales; AUTOEXTEND ON, NEXT 16 MiB & Máximo 512 MiB. Usado: 9,44 MiB (≈ 15\,\% del archivo). Previsión a 12 meses: ≈ 120 MiB (≈ 151 MiB con margen del 25\,\%). \\
+\tb{ts\_renfe\_indices}\newline\tb{/opt/oracle/oradata/FREE/BDII/} \tb{ts\_renfe\_indices01.dbf} & 32 MiB iniciales; AUTOEXTEND ON, NEXT 8 MiB & Máximo ampliado de 256 a 512 MiB con \tb{ALTER DATABASE DATAFILE ... AUTOEXTEND ON NEXT 8M MAXSIZE 512M}. Usado: 18 MiB (≈ 56\,\% del archivo). Previsión a 12 meses: ≈ 240 MiB (≈ 300 MiB con margen); con el máximo anterior de 256 MiB, contando el margen, se habría agotado hacia el mes 11. \\
+\tb{ts\_renfe\_hist}\newline\tb{/opt/oracle/oradata/FREE/BDII/} \tb{ts\_renfe\_hist01.dbf} & 16 MiB iniciales; AUTOEXTEND ON, NEXT 8 MiB & Máximo 128 MiB (cuota de ALUMNO: 128 MiB). Usado: 8,69 MiB: los 8 MiB de la partición de datos P\_2026\_11 y ≈ 0,69 MiB de su partición del índice local, ya reconstruida. \\
+\bottomrule
+\end{longtable}}
+
+\campo{Características} Los tres tablespaces del esquema (\tb{ts\_renfe\_datos}, \tb{ts\_renfe\_indices} y \tb{ts\_renfe\_hist}) son SMALLFILE, con bloque de 8192 bytes, estado ONLINE, contenido PERMANENT, EXTENT MANAGEMENT LOCAL AUTOALLOCATE (extensiones de 64 KiB que pasan a 1 MiB a partir de la 17.ª) y SEGMENT SPACE MANAGEMENT AUTO (ASSM). Se consultan en \tb{DBA\_TABLESPACES} y \tb{DBA\_DATA\_FILES}; NEXT se obtiene como \tb{increment\_by} × tamaño de bloque. (Evidencias B-01 a B-06; ampliación del tablespace de índices: B-17 y B-18; histórico: B-19.) \textbf{Bloques:} las tablas usan el PCTFREE por defecto (10\,\%; ninguna sentencia del esquema lo cambia), que deja libre un 10\,\% de cada bloque para que crezcan las filas al actualizarse; en RENFE es suficiente, porque billetes y viajes se insertan y apenas se modifican. \textbf{Disco:} los máximos de los cuatro tablespaces de ALUMNO suman 3.200 MiB (512 + 512 + 128 + 2.048 de ALUMNO\_DATA, ≈ 3,1 GiB), por debajo del límite de 12 GB de datos de usuario de la edición Free. MAXSIZE no reserva disco: antes de acercarse a esos máximos se comprobaría el espacio libre del volumen de Docker, que comparten datos, redo, FRA y copias.
+
+\campo{Listados de tablas e índices} 28 tablas (antes de crear Billete\_Part en el apartado C, que añade una tabla y dos índices), todas en TS\_RENFE\_DATOS (\tb{USER\_TABLES}, con \tb{segment\_created}) y 41 índices, todos VALID y en TS\_RENFE\_INDICES (\tb{USER\_INDEXES}). (Evidencias B-07 y B-08.)
+\begin{lstlisting}
+SELECT table_name, tablespace_name, segment_created FROM user_tables ORDER BY table_name;
+SELECT index_name, table_name, tablespace_name, status FROM user_indexes ORDER BY table_name, index_name;
+\end{lstlisting}
+
+\subsection{Carga y comparación antes y después}
+
+\campo{Mapa de extensiones} Consulta ejecutada con SYSTEM en la PDB BDII antes y después de la carga. Antes: 44 extensiones, todas de 8 bloques (64 KiB). Después: 244 (76 en ts\_renfe\_datos y 168 en ts\_renfe\_indices). Ejemplo, BILLETE: 16 extensiones de 8 bloques (\tb{block\_id} 360 a 480, \tb{file\_id} 39) y 4 de 128 bloques (\tb{block\_id} 512, 640, 768 y 896); IX\_BILLETE\_FCOMPRA: 16 de 8 bloques y 1 de 128 (\tb{file\_id} 40). Ninguna extensión cruza de archivo y las de un índice quedan intercaladas con las de otros segmentos. (Evidencias B-11, B-14 y B-15.)
+\begin{lstlisting}
+SELECT tablespace_name, segment_name, segment_type, extent_id, file_id, block_id, blocks, bytes
+FROM dba_extents WHERE owner = 'ALUMNO' AND tablespace_name IN ('TS_RENFE_DATOS','TS_RENFE_INDICES')
+ORDER BY tablespace_name, segment_name, extent_id;
+SELECT tablespace_name, COUNT(*) AS extensiones, SUM(blocks) AS bloques, ROUND(SUM(bytes)/1048576,2) AS mib
+FROM dba_extents WHERE owner = 'ALUMNO' AND tablespace_name IN ('TS_RENFE_DATOS','TS_RENFE_INDICES')
+GROUP BY tablespace_name ORDER BY 1;
+\end{lstlisting}
+
+\campo{Carga realizada} 50.000 billetes (40.000 clásicos y 10.000 especiales), 5.000 pasajeros, 2.500 viajes (uno por hora, cada billete ligado a su viaje con 20 asientos distintos por viaje) y 500 reclamaciones, equivalentes a unos 25 días de la hipótesis del apartado A (2.000 billetes/día). Se cargó con \tb{INSERT ... SELECT ... FROM dual CONNECT BY level <= N} y un COMMIT final (script \tb{03\_ALUMNO\_carga\_RENFE.sql}). Todas las cifras de este apartado se tomaron antes de crear Billete\_Part (apartado C). Comprobaciones de filas y segmentos, ejecutadas con ALUMNO antes y después (evidencias B-09, B-10, B-12, B-13 y B-16):
+\begin{lstlisting}
+SELECT 'PASAJERO' AS tabla, COUNT(*) AS filas FROM Pasajero UNION ALL SELECT 'BILLETE', COUNT(*) FROM Billete
+UNION ALL SELECT 'VIAJE', COUNT(*) FROM Viaje UNION ALL SELECT 'BILLETE_CLASICO', COUNT(*) FROM Billete_Clasico
+UNION ALL SELECT 'BILLETE_ESPECIAL', COUNT(*) FROM Billete_Especial UNION ALL SELECT 'RECLAMACION', COUNT(*) FROM Reclamacion;
+SELECT segment_name, segment_type, tablespace_name, bytes, blocks, extents FROM user_segments
+ORDER BY tablespace_name, segment_type, segment_name;
+\end{lstlisting}
+
+{\small
+\begin{longtable}{L{2.7cm} L{3.2cm} L{4.2cm} L{5.0cm}}
+\toprule\filacab
+\cab{Objeto o segmento} & \cab{Antes de la carga} & \cab{Después de la carga} & \cab{Interpretación} \\
+\midrule\endhead
+Billete & 0 filas; sin segmento & 50.000 filas; 5.242.880 B (640 bloques); 20 extensiones & Segmento creado en el primer INSERT. 16 extensiones de 64 KiB + 4 de 1 MiB. ≈ 105 B asignados por fila (incluye la clave del viaje). \\
+Billete\_Clasico y Billete\_Especial & 0 filas; sin segmento & 40.000 filas: 2.097.152 B, 17 ext.\newline 10.000 filas: 589.824 B, 9 ext. & ≈ 52 y ≈ 59 B por fila; los subtipos añaden una tabla y un índice propios por billete. \\
+Pasajero & 0 filas; sin segmento & 5.000 filas; 393.216 B; 6 extensiones & Crece solo con extensiones de 64 KiB: aún no llega a las de 1 MiB. ≈ 79 B por fila. \\
+Viaje & 0 filas; sin segmento & 2.500 filas; 262.144 B; 4 extensiones & ≈ 105 B por fila: además de las fechas guarda el maquinista y el andén de llegada. \\
+Reclamacion & 0 filas; sin segmento & 500 filas; 65.536 B; 1 extensión & Segmento mínimo. \\
+Índices (38 segmentos tras la carga) & 25 segmentos; 1.638.400 B (1,56 MiB); 25 extensiones & 38 segmentos; 18.874.368 B (18 MiB); 168 extensiones & Mayores: UQ\_BILLETE\_ASIENTO (3 MiB) e IX\_BILLETE\_*, PK\_BILLETE, UQ\_BILLETE\_LOC\_TIPO y PK\_BILLETE\_CLASICO (2 MiB cada uno). Los índices pesan casi el doble que los datos. \\
+Total del esquema & 44 segmentos; 2,75 MiB; 44 extensiones & 63 segmentos; 27,44 MiB; 244 extensiones & Datos 1,19 → 9,44 MiB; índices 1,56 → 18 MiB. Los archivos no crecieron (64 y 32 MiB): la carga cabe en el tamaño inicial. \\
+\bottomrule
+\end{longtable}}
+
+% =============================================================================
+\section{Particionado de tablas}
+% =============================================================================
+{\small
+\begin{longtable}{L{4.3cm} L{3.4cm} L{7.6cm}}
+\toprule\filacab
+\cab{Tabla y crecimiento} & \cab{Decisión} & \cab{Justificación} \\
+\midrule\endhead
+Billete: ≈ 730.000 filas en 12 meses (≈ 105 B por fila medidos; ≈ 73 MiB de datos y 6 índices) & Particionar por rango de \tb{fecha\_salida} (fecha del viaje), una partición por mes & Es la tabla que más crece y las consultas e informes son por viaje; los meses cerrados se pueden archivar o borrar por partición. \tb{fecha\_salida} forma parte de \tb{uq\_billete\_asiento}, así que su índice es LOCAL. La clave primaria (\tb{localizador}) no contiene la clave de partición y queda como índice GLOBAL, que se mantiene con UPDATE INDEXES al mover o borrar particiones. \\
+Viaje: ≈ 36.500 filas en 12 meses & No particionar & Volumen pequeño y referenciada por Billete y Revisor\_Viaje. \\
+Billete\_Clasico y Billete\_Especial: ≈ 584.000 y ≈ 146.000 filas & No particionar por ahora & No tienen fecha propia: para particionarlas por mes habría que hacerlo por referencia a Billete (PARTITION BY REFERENCE). Se reconsiderará si el volumen crece mucho. \\
+Reclamacion: ≈ 7.300 filas en 12 meses & No particionar & Volumen mínimo; sin consultas ni mantenimiento por periodos. \\
+\bottomrule
+\end{longtable}}
+
+\campo{DDL del particionado} Se crea Billete\_Part con el mismo contenido (50.000 filas) y se conserva la original para comparar; en producción sustituiría a la original (y \tb{uq\_billete\_loc\_tipo}, que referencian los subtipos, sería otro índice GLOBAL; en la copia no se crea porque los subtipos siguen apuntando a Billete). Script completo: \tb{06\_ALUMNO\_particionado.sql} y traslado en \tb{07\_ALUMNO\_traslado\_particion.sql}. Un intervalo mensual (INTERVAL) evitaría crear particiones a mano; se usan particiones explícitas para controlar el tablespace de cada una. (Evidencia C-01.)
+\begin{lstlisting}
+CREATE TABLE Billete_Part (
+  localizador VARCHAR2(10) NOT NULL, tipo_billete VARCHAR2(8) NOT NULL, f_compra DATE NOT NULL,
+  precio NUMBER(6,2) NOT NULL, asiento VARCHAR2(5) NOT NULL, cod_estacion_taq VARCHAR2(10) NOT NULL,
+  num_taquilla NUMBER(3) NOT NULL, dni_pasajero VARCHAR2(9) NOT NULL, num_serie_tren VARCHAR2(15) NOT NULL,
+  cod_ruta VARCHAR2(10) NOT NULL, fecha_salida DATE NOT NULL,
+  CONSTRAINT chk_billetep_tipo CHECK (...), CONSTRAINT fk_billetep_taquilla ..., CONSTRAINT fk_billetep_pasajero ...,
+  CONSTRAINT fk_billetep_viaje FOREIGN KEY (num_serie_tren, cod_ruta, fecha_salida)
+      REFERENCES Viaje(num_serie_tren, cod_ruta, fecha_salida)
+) PARTITION BY RANGE (fecha_salida) (
+  PARTITION p_2026_11 VALUES LESS THAN (DATE '2026-12-01') TABLESPACE ts_renfe_datos,
+  PARTITION p_2026_12 VALUES LESS THAN (DATE '2027-01-01') TABLESPACE ts_renfe_datos,
+  PARTITION p_2027_01 VALUES LESS THAN (DATE '2027-02-01') TABLESPACE ts_renfe_datos,
+  PARTITION p_2027_02 VALUES LESS THAN (DATE '2027-03-01') TABLESPACE ts_renfe_datos,
+  PARTITION p_futuro  VALUES LESS THAN (MAXVALUE)          TABLESPACE ts_renfe_datos);
+ALTER TABLE Billete_Part ADD CONSTRAINT pk_billete_part PRIMARY KEY (localizador)
+  USING INDEX TABLESPACE ts_renfe_indices;                                -- índice GLOBAL
+CREATE UNIQUE INDEX uq_billetep_asiento ON Billete_Part (num_serie_tren, cod_ruta, fecha_salida, asiento)
+  LOCAL (PARTITION ip_2026_11 TABLESPACE ts_renfe_indices, ..., PARTITION ip_futuro TABLESPACE ts_renfe_indices);
+ALTER TABLE Billete_Part ADD CONSTRAINT uq_billetep_asiento
+  UNIQUE (num_serie_tren, cod_ruta, fecha_salida, asiento) USING INDEX uq_billetep_asiento;
+INSERT INTO Billete_Part SELECT localizador, tipo_billete, f_compra, precio, asiento, cod_estacion_taq,
+  num_taquilla, dni_pasajero, num_serie_tren, cod_ruta, fecha_salida FROM Billete;
+-- cierre de noviembre (script 07)
+ALTER TABLE Billete_Part MOVE PARTITION p_2026_11 TABLESPACE ts_renfe_hist UPDATE INDEXES;
+ALTER INDEX uq_billetep_asiento REBUILD PARTITION ip_2026_11 TABLESPACE ts_renfe_hist;
+\end{lstlisting}
+
+{\small
+\begin{longtable}{L{5.2cm} L{4.6cm} L{5.5cm}}
+\toprule\filacab
+\cab{Tabla y partición} & \cab{Regla de asignación} & \cab{Tablespace} \\
+\midrule\endhead
+Billete\_Part / P\_2026\_11 (índice local: ip\_2026\_11) & VALUES LESS THAN (2026-12-01); 14.400 filas & TS\_RENFE\_HIST (trasladada con MOVE PARTITION) \\
+Billete\_Part / P\_2026\_12 & VALUES LESS THAN (2027-01-01); 14.880 filas & TS\_RENFE\_DATOS (índice local en TS\_RENFE\_INDICES) \\
+Billete\_Part / P\_2027\_01 & VALUES LESS THAN (2027-02-01); 14.880 filas & TS\_RENFE\_DATOS (índice local en TS\_RENFE\_INDICES) \\
+Billete\_Part / P\_2027\_02 & VALUES LESS THAN (2027-03-01); 5.840 filas & TS\_RENFE\_DATOS (índice local en TS\_RENFE\_INDICES) \\
+Billete\_Part / P\_FUTURO & VALUES LESS THAN (MAXVALUE); 0 filas, sin segmento & TS\_RENFE\_DATOS (índice local en TS\_RENFE\_INDICES) \\
+\bottomrule
+\end{longtable}}
+
+\textbf{Prueba de distribución.} COUNT(*) con la cláusula PARTITION (...): 14.400, 14.880, 14.880, 5.840 y 0 filas, 50.000 en total, igual que la tabla original (confirmado tras el traslado). Coincide con el cálculo por fechas: 2.500 viajes desde el 01-11-2026, uno por hora y con 20 billetes cada uno (720, 744, 744 y 292 viajes por mes). En \tb{USER\_SEGMENTS}, P\_FUTURO no tiene segmento (creación diferida) y cada partición con datos ocupa 8.388.608 B (8 MiB, 1 extensión): la tabla particionada asigna 32 MiB frente a los 5 MiB de la original. Es el coste del tamaño inicial de las particiones a escala de laboratorio; con ≈ 60.000 billetes/mes (≈ 6 MiB) pesaría menos. Los índices tienen tamaños normales: de 0,56 a 2 MiB por partición del índice local y 3 MiB el índice global de la clave primaria. (Evidencias C-02, C-03 y C-08.)
+
+\textbf{Prueba de acceso.} Consulta de COUNT(*) con filtro por diciembre de 2026. El plan muestra PARTITION RANGE SINGLE con Pstart = Pstop = 2 (solo P\_2026\_12) y un INDEX FAST FULL SCAN sobre UQ\_BILLETEP\_ASIENTO restringido a esa partición: se descartan las demás. Contraste: la misma consulta sobre la tabla original Billete (sin particionar) usa un INDEX FAST FULL SCAN de UQ\_BILLETE\_ASIENTO completo, sin PARTITION RANGE: recorre todo el índice. (Evidencias C-04 y C-05.)
+\begin{lstlisting}
+EXPLAIN PLAN FOR SELECT COUNT(*) FROM Billete_Part
+  WHERE fecha_salida >= DATE '2026-12-01' AND fecha_salida < DATE '2027-01-01';
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY(NULL, NULL, 'BASIC +PARTITION'));
+\end{lstlisting}
+
+\textbf{Mantenimiento.} Tras MOVE PARTITION y REBUILD, P\_2026\_11 y su partición del índice local están en TS\_RENFE\_HIST; las demás siguen en TS\_RENFE\_DATOS y TS\_RENFE\_INDICES. Las 5 particiones del índice local están USABLE y el índice global PK\_BILLETE\_PART sigue VALID gracias a UPDATE INDEXES (sin esa cláusula quedaría UNUSABLE). Las particiones antiguas se podrían archivar o borrar sin tocar el resto. (Evidencias C-06 y C-07.)
+
+% =============================================================================
+\section{Organización de SGA y PGA}
+% =============================================================================
+\campo{Configuración de partida} Gestión automática de la SGA (\tb{sga\_target} = \tb{sga\_max\_size} = 1536M; \tb{memory\_target} = 0) y PGA con objetivo agregado (\tb{pga\_aggregate\_target} = 512M; \tb{pga\_aggregate\_limit} = 2G). La edición Free limita la RAM utilizada a 2 GB, los datos de usuario a 12 GB y la CPU; subir parámetros no amplía esos límites. SGA y PGA objetivo suman ya 2 GB, por lo que no hay margen para aumentar la memoria.
+
+{\small
+\begin{longtable}{L{3.3cm} L{3.6cm} L{1.9cm} L{6.3cm}}
+\toprule\filacab
+\cab{Elemento o parámetro} & \cab{Actual} & \cab{Propuesto} & \cab{Justificación} \\
+\midrule\endhead
+\tb{sga\_target} / \tb{sga\_max\_size} & 1536M / 1536M\newline Buffers y Variable Size tras el reinicio: ≈ 944 MiB y 576 MiB & Mantener & Con la RAM de la edición Free agotada entre SGA y PGA no se puede subir. No se ha medido V\$SGA\_TARGET\_ADVICE con carga representativa: se revisará si aparecen lecturas físicas excesivas. \\
+\tb{pga\_aggregate\_target} / \tb{pga\_aggregate\_limit} & 512M / 2G\newline PGA asignada de la instancia: 404,02 MiB (máximo 414,13 MiB), medida antes del reinicio & Mantener ambos & Sobre los 404 MiB medidos se suman 15 × 2 + 4 × 12 = 78 MiB de la aplicación (15 sesiones y 4 áreas de trabajo simultáneas de 12 MiB, hipótesis); con un 25\,\% de margen sobre ese incremento resultan ≈ 500 MiB, coherentes con 512M. El límite no se reduce para evitar cancelaciones de sesiones. \\
+\tb{db\_cache\_size}, \tb{shared\_pool\_size}, \tb{large\_pool\_size} & 0 / 0 / 0 (con gestión automática de SGA, Oracle los dimensiona) & Mantener & Con 15 sesiones y un conjunto de cursores pequeño no se justifica fijar mínimos; no se han medido V\$DB\_CACHE\_ADVICE ni esperas con carga real. \\
+\tb{log\_buffer} & 4192K (≈ 4,09 MiB), estático & Mantener & Las ráfagas de la carga nocturna (≈ 95 MiB de redo en total, a partir de lo medido) se vacían por LGWR; no se ha medido espera de \emph{log buffer space} y se revisará con una carga representativa. \\
+\bottomrule
+\end{longtable}}
+
+\campo{Comprobación} Consultas de solo lectura en CDB\$ROOT (SYSTEM desde SQL Developer o SYSDBA desde SQL*Plus). (Evidencias D-01 a D-03.)
+\begin{lstlisting}
+SELECT name, display_value FROM v$parameter WHERE name IN ('memory_target','memory_max_target','sga_target',
+  'sga_max_size','pga_aggregate_target','pga_aggregate_limit','db_cache_size','shared_pool_size',
+  'large_pool_size','log_buffer','processes','sessions');
+SELECT con_id, name, ROUND(value/1048576,2) AS mib FROM v$sga ORDER BY con_id, name;
+SELECT con_id, name, ROUND(value/1048576,2) AS mib FROM v$pgastat
+  WHERE name IN ('total PGA allocated','maximum PGA allocated') ORDER BY con_id, name;
+\end{lstlisting}
+
+% =============================================================================
+\needspace{16\baselineskip}
+\section{Grupos de Redo Log y Archive Log}
+% =============================================================================
+\subsection{Grupos y miembros de redo}
+
+{\small
+\begin{longtable}{L{1.7cm} L{8.0cm} L{2.4cm} L{2.9cm}}
+\toprule\filacab
+\cab{Grupo} & \cab{Miembros y ubicación} & \cab{Tamaño} & \cab{Actual o propuesto} \\
+\midrule\endhead
+1 & 1 miembro: \tb{/opt/oracle/oradata/FREE/redo01.log} & 20 MiB & Actual \\
+2 & 1 miembro: \tb{/opt/oracle/oradata/FREE/redo02.log} & 20 MiB & Actual \\
+1, 2 y 3 & 2 miembros por grupo (a y b), p.\,ej. \tb{/opt/oracle/oradata/FREE/redo01a.log} y \tb{redo01b.log}; mismo volumen Docker & 128 MiB por miembro & Propuesto \\
+\bottomrule
+\end{longtable}}
+
+\campo{Justificación del redo} \textbf{Situación actual:} 2 grupos de 20 MiB con un miembro cada uno (ciclo de 40 MiB, sin copia del redo); el alert log mostró avisos de \emph{checkpoint not complete} al cambiar de grupo. \textbf{Medida:} insertar las 50.000 filas de Billete en una copia generó 5.022.692 bytes de redo sin índices (≈ 100 B por fila) y 49.836.928 bytes con sus 6 índices (≈ 997 B por fila), unas 10 veces más; las lecturas se hicieron seguidas (intervalos de 2 y 6 s), así que el ruido de fondo es despreciable (evidencia E-11). \textbf{Dimensionamiento:} la carga masiva nocturna (100.000 filas, hipótesis) genera ≈ 95 MiB, cota superior porque Viaje y Revisor\_Viaje tienen menos índices que Billete; con un 25\,\% de margen, ≈ 119 MiB por grupo. Con la fórmula tamaño = tasa × intervalo × margen: la carga con índices generó 49.836.928 bytes (47,53 MiB) en 6 s (L3 a las 22:09:46 y L4 a las 22:09:52), ≈ 7,9 MiB/s, la tasa de una ráfaga real porque las lecturas se tomaron justo antes y después del INSERT. A esa tasa un grupo de 128 MiB se llena en ≈ 16 s, pero la carga nocturna completa (≈ 95 MiB) cabe en un solo grupo: provoca como mucho un cambio de grupo, y con 3 grupos ARCn dispone del tiempo de llenar los otros dos para archivarlo antes de reutilizarlo. Con los 20 MiB actuales esa misma carga recorrería el ciclo de 40 MiB más de dos veces. Fuera de la carga (≈ 30 MiB/día) un grupo tardaría días en llenarse; por eso hace falta \tb{ARCHIVE\_LAG\_TARGET} = 900, para que el redo de las ventas se archive como mucho cada 15 minutos (RPO). \textbf{Propuesta:} 3 grupos × 2 miembros × 128 MiB (ciclo de 384 MiB y 768 MiB en miembros). Tasa diaria estimada: ≈ 126 MiB (venta ≈ 12 y otras operaciones ≈ 5, hipótesis; carga masiva ≈ 95 y actividad de fondo ≈ 14, a partir de medidas). \textbf{Limitación:} los dos miembros estarían en el mismo volumen, así que protegen de la pérdida de un archivo, no del disco. El cambio se haría añadiendo los grupos nuevos y retirando los antiguos cuando estén INACTIVE y archivados, sin tocar los archivos desde el sistema operativo. (Evidencias E-02 a E-04 y E-11.)
+\begin{lstlisting}
+SELECT 'L1 antes sin indices' AS lectura, TO_CHAR(SYSDATE,'HH24:MI:SS') AS hora, value AS redo_bytes
+FROM v$sysstat WHERE name = 'redo size';   -- antes y después de cada carga (L1-L4), SYSTEM en CDB$ROOT
+\end{lstlisting}
+
+\campo{ARCHIVELOG} Estado inicial NOARCHIVELOG. Se activó en la instancia propia (SHUTDOWN IMMEDIATE, STARTUP MOUNT, ALTER DATABASE ARCHIVELOG y OPEN) para poder recuperar hasta un punto posterior a la última copia (RPO 15 min, RTO 60 min). \textbf{Destino:} \tb{LOCATION=USE\_DB\_RECOVERY\_FILE\_DEST}, con la FRA en \tb{/opt/oracle/oradata/FRA} y una cuota de 4 GiB. \textbf{Capacidad:} con ≈ 126 MiB/día y 7 días de retención hacen falta ≈ 0,86 GiB de archived logs y ≈ 0,13 GiB de autobackups, ≈ 1,24 GiB con un 25\,\% de margen, así que la cuota de 4 GiB se mantiene. \textbf{Copias:} la copia completa (2.982,93 MiB) se guarda fuera de la FRA, en \tb{/opt/oracle/oradata/rman}, y se validó con RESTORE DATABASE VALIDATE; guardar dos copias completas dentro de la FRA exigiría ≈ 9 GiB. Se propone \tb{ARCHIVE\_LAG\_TARGET} = 900 (su valor por defecto es 0) para archivar el redo como mucho cada 15 minutos; la protección es limitada mientras redo, archivados y datos compartan volumen. \textbf{Comprobación:} ALTER SYSTEM ARCHIVE LOG CURRENT archivó la secuencia 29 (RECID 17, destino 1) y la FRA pasó a 19 archivos y ≈ 334 MiB. Se vigilará V\$RECOVERY\_FILE\_DEST y no se borrarán archivos a mano. (Evidencias E-01 y E-05 a E-10.)
+
+% =============================================================================
+\section{Usuarios, cuotas y conexiones}
+% =============================================================================
+{\small
+\begin{longtable}{L{4.6cm} L{5.4cm} L{5.3cm}}
+\toprule\filacab
+\cab{Cuenta y finalidad} & \cab{Roles y permisos} & \cab{Perfil y máximo de sesiones} \\
+\midrule\endhead
+\tb{renfe\_app}: API de venta de billetes y atención al cliente (cuenta propuesta, no creada) & \tb{rol\_renfe\_app}: CREATE SESSION y SELECT/INSERT/UPDATE/DELETE sobre las tablas de la aplicación; sin DDL ni privilegios de sistema & \tb{perfil\_renfe\_app}: SESSIONS\_PER\_USER 10 (8 del pool + 2 de margen) \\
+\tb{renfe\_batch}: carga nocturna y tareas programadas (cuenta propuesta, no creada) & \tb{rol\_renfe\_batch}: CREATE SESSION e INSERT/UPDATE sobre Viaje y Revisor\_Viaje & \tb{perfil\_renfe\_batch}: SESSIONS\_PER\_USER 2, CONNECT\_TIME 240 \\
+\tb{renfe\_admin}: administración de datos maestros e informes (cuenta propuesta, no creada) & \tb{rol\_renfe\_admin}: CREATE SESSION, SELECT sobre todas las tablas y DML sobre los datos maestros & \tb{perfil\_renfe\_admin}: SESSIONS\_PER\_USER 3, IDLE\_TIME 30 \\
+\tb{usr\_prueba}: cuenta temporal creada solo para las pruebas de sesiones y de cuota & CREATE SESSION y CREATE TABLE; sin más privilegios & \tb{perfil\_prueba\_2}: SESSIONS\_PER\_USER 2 (prueba de sesiones). En la prueba de cuota, perfil DEFAULT sin modificar \\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}{L{4.6cm} L{3.3cm} L{3.4cm} L{3.8cm}}
+\toprule\filacab
+\cab{Propietario} & \cab{Tablespace} & \cab{Cuota} & \cab{Consumo actual} \\
+\midrule\endhead
+ALUMNO (propietario actual del esquema RENFE) & \tb{ts\_renfe\_datos} & 512 MiB & 9,44 MiB (9.895.936 bytes) \\
+ALUMNO (propietario actual del esquema RENFE) & \tb{ts\_renfe\_indices} & 512 MiB (ampliada desde 256 MiB) & 18 MiB (18.874.368 bytes) \\
+ALUMNO (propietario actual del esquema RENFE) & \tb{ts\_renfe\_hist} & 128 MiB & 8,69 MiB (9.109.504 bytes) \\
+\tb{usr\_prueba} (cuenta temporal) & \tb{USERS} (PDB BDII) & 1 MiB & 1.048.576 bytes asignados (= MAX\_BYTES): cuota agotada \\
+\bottomrule
+\end{longtable}}
+
+\campo{Relación con los sistemas} Las cuentas \tb{renfe\_app}, \tb{renfe\_batch} y \tb{renfe\_admin} son una propuesta: hoy solo existen ALUMNO, propietaria del esquema, y \tb{usr\_prueba}, durante las pruebas. \textbf{Sesiones:} \tb{renfe\_app} cubre la API (2 réplicas × pool de 4 = 8, más 2 de margen = 10), \tb{renfe\_batch} la carga nocturna y las tareas (2) y \tb{renfe\_admin} la administración (2 + 1 de margen = 3); en total 15, igual que la punta con margen (12 × 1,25). \textbf{Cuotas:} 512 MiB en datos y 512 MiB en índices cubren el crecimiento a 12 meses extrapolado de lo medido (≈ 120 y ≈ 240 MiB; ≈ 151 y ≈ 300 MiB con margen); la de índices se amplió desde 256 MiB porque, contando el margen, se habría agotado hacia el mes 11. Los perfiles se aplican con \tb{RESOURCE\_LIMIT} = TRUE; los límites que no fijan se heredan de DEFAULT, que no se modifica. \textbf{Duración e inactividad} (en minutos): \tb{renfe\_app} no limita IDLE\_TIME ni CONNECT\_TIME, porque el pool mantiene conexiones abiertas y en espera durante toda la jornada y cortarlas daría errores en la aplicación; las conexiones abandonadas se retiran desde la configuración del pool. \tb{renfe\_batch} tiene CONNECT\_TIME 240, muy por encima de lo que dura la carga nocturna, para cortar una tarea que se quede colgada. \tb{renfe\_admin} tiene IDLE\_TIME 30, para no dejar sesiones administrativas abiertas sin uso. El perfil efectivo, con los límites heredados de DEFAULT, se revisaría en \tb{DBA\_PROFILES} antes y después de asignarlo.
+
+\textbf{Pruebas realizadas} con la cuenta temporal \tb{usr\_prueba} en la PDB BDII (script \tb{09\_SYSTEM\_prueba\_sesiones\_y\_cuota.sql}). (1) Con \tb{perfil\_prueba\_2} (SESSIONS\_PER\_USER = 2), la tercera conexión simultánea se rechazó con ORA-02391 (\emph{exceeded simultaneous SESSIONS\_PER\_USER limit}). (2) Con una cuota de 1 MiB en USERS, un INSERT de 50.000 filas de 200 bytes (≈ 10 MiB, estimación) falló con ORA-01536 (\emph{space quota exceeded for tablespace 'USERS'}) y \tb{USER\_TS\_QUOTAS} mostró BYTES = MAX\_BYTES = 1.048.576. No se modificó el perfil DEFAULT ni las cuentas SYSTEM y ALUMNO. (Evidencias F-02 a F-04.)
+
+\campo{Parámetros de capacidad} \tb{processes}: actual 200 (uso 92, máximo observado 98); propuesta: mantener. \tb{sessions}: actual 322 (uso 120, máximo 128), derivado de \tb{processes}; propuesta: mantener. Oracle ya usa ≈ 92 procesos sin carga de la aplicación; con 15 conexiones en servidor dedicado (un proceso servidor cada una) se llega a ≈ 107-113 procesos y ≈ 135 sesiones, por debajo de 200 y 322. El máximo observado procede de un periodo breve tras el arranque y no predice una punta real. (Evidencias D-01 y F-01.)
+
+% =============================================================================
+\clearpage
+\section*{Anexo de evidencias}
+\addcontentsline{toc}{section}{Anexo de evidencias}
+% =============================================================================
+Capturas y salidas de la instalación propia (Oracle AI Database 26ai Free en Docker, PDB BDII), numeradas por apartado y citadas en el texto. Las evidencias B-07 a B-15, B-18, B-19, C-01 a C-08 y E-11 son la salida de SQL*Plus de una ejecución completa de los scripts 99 y 01 a 08 con el esquema de la repesca (09/11/2026), incluida sin retocar. Las demás son capturas de SQL Developer o salidas de terminal de la instalación original, que no dependen del esquema; en ellas, [...] indica líneas omitidas.
+
+\subsection*{Evidencias del apartado B}
+\evimagen{B-01}{Tablespaces de la PDB BDII antes del apartado}{SYSTEM en BDII · DBA\_TABLESPACES}
+\evimagen{B-02}{Archivos de datos de partida}{SYSTEM en BDII · DBA\_DATA\_FILES}
+\evimagen{B-03}{Características de ts\_renfe\_datos y ts\_renfe\_indices}{SYSTEM en BDII · DBA\_TABLESPACES}
+\evimagen{B-04}{Archivos de ts\_renfe\_datos y ts\_renfe\_indices: tamaño, máximo y NEXT}{SYSTEM en BDII · DBA\_DATA\_FILES}
+\evimagen[0.6\linewidth]{B-05}{Cuotas de ALUMNO tras crear los tablespaces}{SYSTEM en BDII · DBA\_TS\_QUOTAS}
+\evimagen[0.65\linewidth]{B-06}{Tablespace por defecto de ALUMNO}{SYSTEM en BDII · DBA\_USERS}
+\evtexto{B-07}{Las 28 tablas y su tablespace (antes de la carga)}{ALUMNO (SQL*Plus) · USER\_TABLES}
+\evtexto{B-08}{Los 41 índices y su tablespace}{ALUMNO (SQL*Plus) · USER\_INDEXES}
+\evtexto{B-09}{Segmentos antes de la carga}{ALUMNO (SQL*Plus) · USER\_SEGMENTS}
+\evtexto{B-10}{Filas antes de la carga}{ALUMNO (SQL*Plus) · COUNT(*) por tabla}
+\evtexto{B-11}{Mapa de extensiones antes de la carga}{SYSTEM en BDII (SQL*Plus) · DBA\_EXTENTS, detalle y resumen}
+\evtexto{B-12}{Segmentos después de la carga}{ALUMNO (SQL*Plus) · USER\_SEGMENTS}
+\evtexto{B-13}{Filas después de la carga}{ALUMNO (SQL*Plus) · COUNT(*) por tabla}
+\evtexto{B-14}{Resumen de extensiones por tablespace después de la carga}{SYSTEM en BDII (SQL*Plus) · DBA\_EXTENTS agrupado}
+\evtexto{B-15}{Mapa de extensiones de BILLETE e IX\_BILLETE\_FCOMPRA después de la carga}{SYSTEM en BDII (SQL*Plus) · DBA\_EXTENTS}
+\evimagen{B-16}{Archivos después de la carga (sin crecer)}{SYSTEM en BDII · DBA\_DATA\_FILES}
+\evimagen{B-17}{Archivos tras ampliar ts\_renfe\_indices a 512 MiB}{SYSTEM en BDII · DBA\_DATA\_FILES}
+\evtexto{B-18}{Cuotas de ALUMNO tras la ampliación}{SYSTEM en BDII (SQL*Plus) · DBA\_TS\_QUOTAS}
+\evtexto{B-19}{Uso de la cuota de ts\_renfe\_hist tras el traslado de la partición}{ALUMNO (SQL*Plus) · USER\_TS\_QUOTAS}
+
+\needspace{18\baselineskip}
+\subsection*{Evidencias del apartado C}
+\evtexto{C-01}{Mapa de particiones de Billete\_Part}{ALUMNO (SQL*Plus) · USER\_TAB\_PARTITIONS}
+\evtexto{C-02}{Filas por partición}{ALUMNO (SQL*Plus) · COUNT(*) con PARTITION (...)}
+\evtexto{C-03}{Segmentos de tabla e índices por partición; índice global y local}{ALUMNO (SQL*Plus) · USER\_SEGMENTS y USER\_INDEXES}
+\evtexto{C-04}{Plan con filtro por diciembre en la tabla particionada: PARTITION RANGE SINGLE, Pstart = Pstop = 2}{ALUMNO (SQL*Plus) · EXPLAIN PLAN y DBMS\_XPLAN}
+\evtexto{C-05}{Plan de la misma consulta en la tabla original, sin particionar}{ALUMNO (SQL*Plus) · EXPLAIN PLAN y DBMS\_XPLAN}
+\evtexto{C-06}{Particiones y segmentos tras trasladar P\_2026\_11 a ts\_renfe\_hist}{ALUMNO (SQL*Plus) · USER\_TAB\_PARTITIONS y USER\_SEGMENTS}
+\evtexto{C-07}{Particiones del índice local tras el traslado (todas USABLE) e índice global VALID}{ALUMNO (SQL*Plus) · USER\_IND\_PARTITIONS y USER\_INDEXES}
+\evtexto{C-08}{Total de filas de la tabla particionada tras el traslado}{ALUMNO (SQL*Plus) · COUNT(*)}
+
+\needspace{18\baselineskip}
+\subsection*{Evidencias del apartado D}
+\evtexto{D-01}{Parámetros de memoria y de capacidad}{SYSDBA en CDB\$ROOT · V\$PARAMETER}
+\evimagen[0.8\linewidth]{D-02}{Componentes de la SGA (antes del reinicio)}{SYSTEM en CDB\$ROOT · V\$SGA}
+\evimagen[0.7\linewidth]{D-03}{PGA asignada y máxima por contenedor (antes del reinicio)}{SYSTEM en CDB\$ROOT · V\$PGASTAT}
+
+\needspace{18\baselineskip}
+\subsection*{Evidencias del apartado E}
+\evimagen[0.6\linewidth]{E-01}{Modo de la base de partida: NOARCHIVELOG}{SYSTEM en CDB\$ROOT · V\$DATABASE}
+\evimagen{E-02}{Grupos de redo de partida}{SYSTEM en CDB\$ROOT · V\$LOG}
+\evimagen[0.7\linewidth]{E-03}{Miembros de cada grupo}{SYSTEM en CDB\$ROOT · V\$LOGFILE}
+\evimagen{E-04}{Capacidad del ciclo y espacio en miembros}{SYSTEM en CDB\$ROOT · V\$LOG agregado}
+\evimagen{E-05}{Parámetros de FRA y archivado de partida}{SYSTEM en CDB\$ROOT · V\$PARAMETER}
+\evimagen{E-06}{Destino de archivado de partida}{SYSTEM en CDB\$ROOT · V\$ARCHIVE\_DEST}
+\evtexto{E-07}{Configuración del destino y cambio a ARCHIVELOG}{SQL*Plus como SYSDBA en el contenedor (los parámetros de la FRA se fijaron antes con SCOPE=BOTH)}
+\evtexto{E-08}{Copia con RMAN fuera de la FRA y validación}{RMAN (target /) y SQL*Plus como SYSDBA · extracto}
+\evtexto{E-09}{Archivado forzado: grupos y registros antes y después de ALTER SYSTEM ARCHIVE LOG CURRENT}{SQL*Plus como SYSDBA en CDB\$ROOT · V\$LOG y V\$ARCHIVED\_LOG · extracto}
+\evtexto{E-10}{Procesos de archivado y uso de la FRA tras el archivado}{SQL*Plus como SYSDBA en CDB\$ROOT · V\$BGPROCESS, V\$RECOVERY\_AREA\_USAGE y V\$RECOVERY\_FILE\_DEST · extracto}
+\evtexto{E-11}{Medida del redo: 50.000 filas de Billete sin índices (L1 → L2) y con sus 6 índices (L3 → L4)}{SYSTEM en CDB\$ROOT (SQL*Plus) · V\$SYSSTAT (redo size)}
+Sin índices: 380.760.632 − 375.737.940 = 5.022.692 bytes (≈ 100 B por fila). Con índices: 430.720.928 − 380.884.000 = 49.836.928 bytes (≈ 997 B por fila).
+
+\needspace{18\baselineskip}
+\subsection*{Evidencias del apartado F}
+\evtexto{F-01}{Uso de procesos y sesiones frente al límite}{SYSDBA en CDB\$ROOT · V\$RESOURCE\_LIMIT}
+\evimagen[0.6\linewidth]{F-02}{Rechazo de la tercera sesión simultánea de usr\_prueba (ORA-02391)}{SQL Developer para VS Code · conexión usr\_prueba\_3}
+\evimagen[0.6\linewidth]{F-03}{Rechazo de la tercera sesión (segundo aviso del cliente)}{SQL Developer para VS Code}
+\evtexto{F-04}{Configuración de la prueba y rechazo por cuota (ORA-01536)}{SYSTEM en BDII y usr\_prueba (SQLcl) · extracto}
+
+\end{document}

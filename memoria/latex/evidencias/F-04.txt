@@ -1,0 +1,14 @@
+Profile PERFIL_PRUEBA_2 created.
+User USR_PRUEBA created.
+Grant succeeded.
+[...]
+Table PRUEBA_CUOTA created.
+
+Error starting at line : 2 in command -
+INSERT INTO prueba_cuota SELECT level, RPAD('x',200,'x') FROM dual CONNECT BY level <= 50000
+Error at Command Line : 2 Column : 13
+Error report -
+SQL Error: ORA-01536: space quota exceeded for tablespace 'USERS'
+
+TABLESPACE_NAME         BYTES    MAX_BYTES
+USERS                 1048576      1048576

@@ -1,0 +1,21 @@
+       POS PARTITION_ TABLESPACE_NAME  HIGH_VALUE
+---------- ---------- ---------------- --------------------------------------
+         1 P_2026_11  TS_RENFE_DATOS   TO_DATE(' 2026-12-01 00:00:00', 'SYYYY
+                                       -MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREG
+                                       ORIA
+
+         2 P_2026_12  TS_RENFE_DATOS   TO_DATE(' 2027-01-01 00:00:00', 'SYYYY
+                                       -MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREG
+                                       ORIA
+
+         3 P_2027_01  TS_RENFE_DATOS   TO_DATE(' 2027-02-01 00:00:00', 'SYYYY
+                                       -MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREG
+                                       ORIA
+
+         4 P_2027_02  TS_RENFE_DATOS   TO_DATE(' 2027-03-01 00:00:00', 'SYYYY
+                                       -MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREG
+                                       ORIA
+
+         5 P_FUTURO   TS_RENFE_DATOS   MAXVALUE
+
+5 rows selected.
