@@ -15,10 +15,11 @@ COMMIT;
 -- [SYSTEM] lectura L2
 SELECT 'L2 despues sin indices' AS lectura, TO_CHAR(SYSDATE,'HH24:MI:SS') AS hora, value AS redo_bytes FROM v$sysstat WHERE name = 'redo size';
 
--- [ALUMNO] 3 (vaciar y crear los mismos 5 índices que Billete)
+-- [ALUMNO] 3 (vaciar y crear los mismos 6 índices que Billete: PK, 2 UNIQUE y 3 secundarios)
 TRUNCATE TABLE redo_test;
 ALTER TABLE redo_test ADD CONSTRAINT pk_redo_test PRIMARY KEY (localizador) USING INDEX TABLESPACE ts_renfe_indices;
 ALTER TABLE redo_test ADD CONSTRAINT uq_redo_test UNIQUE (localizador, tipo_billete) USING INDEX TABLESPACE ts_renfe_indices;
+ALTER TABLE redo_test ADD CONSTRAINT uq_redo_asiento UNIQUE (num_serie_tren, cod_ruta, fecha_salida, asiento) USING INDEX TABLESPACE ts_renfe_indices;
 CREATE INDEX ix_redo_fcompra ON redo_test (f_compra) TABLESPACE ts_renfe_indices;
 CREATE INDEX ix_redo_pasajero ON redo_test (dni_pasajero) TABLESPACE ts_renfe_indices;
 CREATE INDEX ix_redo_taquilla ON redo_test (cod_estacion_taq, num_taquilla) TABLESPACE ts_renfe_indices;
