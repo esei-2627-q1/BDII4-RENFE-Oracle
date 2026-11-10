@@ -1,0 +1,19 @@
+2026-11-01T21:19:21.115215+01:00
+Thread 1 advanced to log sequence 15 (LGWR switch),  current SCN: 2275963
+  Current log# 1 seq# 15 mem# 0: /opt/oracle/oradata/FREE/redo01.log
+[...]
+2026-11-01T21:19:27.686636+01:00
+Thread 1 cannot allocate new log, sequence 16
+Checkpoint not complete
+  Current log# 1 seq# 15 mem# 0: /opt/oracle/oradata/FREE/redo01.log
+2026-11-01T21:19:29.506563+01:00
+Thread 1 advanced to log sequence 16 (LGWR switch),  current SCN: 2285014
+  Current log# 2 seq# 16 mem# 0: /opt/oracle/oradata/FREE/redo02.log
+[...]
+2026-11-01T21:19:39.690062+01:00
+Thread 1 cannot allocate new log, sequence 17
+Checkpoint not complete
+  Current log# 2 seq# 16 mem# 0: /opt/oracle/oradata/FREE/redo02.log
+2026-11-01T21:19:42.542988+01:00
+Thread 1 advanced to log sequence 17 (LGWR switch),  current SCN: 2300233
+  Current log# 1 seq# 17 mem# 0: /opt/oracle/oradata/FREE/redo01.log

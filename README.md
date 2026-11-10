@@ -11,7 +11,8 @@ Jacobo Montero Naranjo y Pablo Regueira Castaño.
 
 | Carpeta | Qué hay |
 | --- | --- |
-| `memoria/` | Memoria final en PDF (la que se entrega en Moovi), su fuente LaTeX en `memoria/latex/` y el ZIP para Overleaf; versión Word e instrucciones de revisión y reproducción |
+| `memoria/` | Memoria final en PDF (la que se entrega en Moovi), su fuente LaTeX en `memoria/latex/`, el ZIP para Overleaf y la versión Word |
+| `INSTRUCCIONES.md` | Cómo revisar la memoria y reproducir la práctica, con los resultados esperados |
 | `scripts/` | Todos los scripts SQL, numerados en el orden en que se ejecutan |
 | `docker/` | `docker-compose-bdii.yml` del laboratorio (Oracle 26ai Free + VS Code con SQL Developer) |
 
@@ -34,7 +35,7 @@ Jacobo Montero Naranjo y Pablo Regueira Castaño.
    `10_consultas_de_comprobacion.sql` sirve para comparar resultados y `99_limpieza.sql` lo deshace todo.
 
 Los detalles, los resultados esperados y los pasos delicados (ARCHIVELOG y RMAN) están en
-`memoria/Instrucciones_revision_y_reproduccion.pdf`.
+`INSTRUCCIONES.md`.
 
 > **Aviso:** para apagar, `docker compose -f docker/docker-compose-bdii.yml down -t 120`.
 > Nunca `down -v`: borra el volumen y la base entera.
@@ -60,8 +61,7 @@ capturas en `memoria/latex/figuras/`.
 
 Si se cambia un `.tex`, regenerad también el ZIP de Overleaf para que no quede desfasado.
 
-## Pendiente
+## Estado
 
-- Confirmar con el profesor que la práctica va con el esquema de la repesca.
-- `memoria/Instrucciones_revision_y_reproduccion.pdf` conserva los resultados esperados del esquema
-  antiguo (26 tablas, 34 índices, 72/731 B de redo…); la memoria ya tiene los nuevos.
+El profesor confirmó que la práctica va con el esquema de la repesca del E1. La memoria, las evidencias
+y los scripts están alineados con ese esquema; `INSTRUCCIONES.md` recoge los resultados esperados.
